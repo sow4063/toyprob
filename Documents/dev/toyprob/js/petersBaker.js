@@ -31,7 +31,6 @@ function cakes(recipe, available) {
     else
       arr.push(0);
   }
-  console.log(arr);
 
   return arr.sort(function(a,b){return a - b;})[0];
 };

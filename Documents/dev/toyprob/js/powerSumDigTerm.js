@@ -38,7 +38,7 @@ function powerSumDigTerm(n) {
   }
 
   arr.sort(function(a,b){return a-b});
-  console.log(arr);
+
   return arr[n-1];
 };
 
