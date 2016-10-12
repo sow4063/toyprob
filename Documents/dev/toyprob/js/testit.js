@@ -55,10 +55,22 @@ People who like to challenge, can try these kata:
 Play Tetris : Shape anastomosis
 Play FlappyBird : Advance Bravely
 PUZZLES / GAMES
-*/
 
+*/
 function testit(s){
-  return ???;
+  var l = s.length;
+
+  if(l <= 3)
+    return s[2] || "";
+
+  var res = s[2];
+  for(var i = 3; i < s.length; i +=2 ) {
+    if( i != 9 && i != 15 )
+      res += s[i];
+  }
+
+  return res;
+
 };
 
 console.log(testit(""),         "", "")
@@ -70,3 +82,22 @@ console.log(testit("00111"),    "11", "")
 console.log(testit("001111"),   "111", "")
 console.log(testit("0011111"),  "111", "")
 console.log(testit("00111111"), "1111", "")
+
+// best practice
+const testit = s => s.split("").filter((item, index) => isPerfect(index)).join("");
+
+const isPerfect = n => isPrime(n) && isOddish(n);
+
+const isOddish = n => n < 3 ? n == 2 : n % 2 == 1;
+
+const isPrime = n => {
+  for (var i = 3; i <= Math.sqrt(n); i += 2){
+    if (n % i == 0){
+      return false;
+    }
+  }
+  return true;
+};
+
+// clever
+const testit = s => [2, 3, 5, 7, 11, 13, 17, 19].map(_ => s[_]).join("");
