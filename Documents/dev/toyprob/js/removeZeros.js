@@ -21,19 +21,52 @@ You are also not allowed to use any Array.prototype or Object.prototype methods.
 ALGORITHMS / ARRAYS / SORTING
 */
 
-function destructuringSwap(list, iA, iB){
-  [list[iA], list[iB]] = [list[iB], list[iA]];
-  return list;
+function swapArray(arr,idx) {
+  var v = arr[idx];
+  for(var i = idx; i < arr.length; i++ ) {
+    arr[i] = arr[i+1];
+  }
+
+  arr[arr.length-1] = v;
 };
 
-// destructuringSwap([1,2,5,4,3], 2, 4)
-// -> [1,2,3,4,5]
-
-function removeZeros(arr) {
-  return arr.filter(function(value){return value !== 0}).concat(arr.filter(function(value) {return value === 0;}));
+function removeZeros(array) {
+  var cnt = 0;
+  for( var j = 0; j < array.length - cnt; j++ ) {
+    if( array[j] === 0 || array[j] === "0" ) {
+      swapArray(array, j);
+      cnt++;
+      if( array[j] === 0 || array[j] === "0" )
+        j -= 1;
+    }
+  }
+  return array;
 };
 
 var input = [7, 2, 3, 0, 4, 6, 0, 0, 13, 0, 78, 0, 0, 19, 14];
 var solution = [7, 2, 3, 4, 6, 13, 78, 19, 14, 0, 0, 0, 0, 0, 0];
 
 console.log(JSON.stringify(removeZeros(input)), JSON.stringify(solution));
+
+// best practice
+function removeZeros(array) {
+    var end = array.length;
+    for (var i = 0; i < end; i++) {
+        if (array[i] === 0 || array[i] === "0") {
+            arrayShiftToEnd(array, i);
+            i--;
+            end--;
+        }
+    }
+    return array;
+}
+
+function arrayShiftToEnd(array, n) {
+    var end = array[n]
+    for(var i = n; i <  array.length; i++) {
+        array[i] = array[i + 1]
+    }
+    array[array.length - 1] = end;
+
+    return array
+}
