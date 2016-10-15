@@ -8,4 +8,9 @@ Find that and then you can CutTheWire(wireKey);
 */
 
 var wire; // Find the wire.
+var wire = "wireKey"; // Find the wire.
+CutTheWire(global[theWire]);
+
+// best practice
+var wire = Object.keys(this).pop()
 CutTheWire(this[wire]);
