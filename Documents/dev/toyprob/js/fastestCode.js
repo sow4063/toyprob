@@ -37,6 +37,35 @@ function findAB(numbers,c) {
 
 };
 
+// time over
+function findAB(numbers,c) {
+  var checked = {};
+  var res = [];
+
+  for( var i = 0; i < numbers.length; ++i ) {
+
+    var val = c / numbers[i];
+
+    if( val === -0 ) val = 0;
+
+    if( checked[val] ) {
+      res.push( [ val, numbers[i] ] );
+    }
+    else if( (numbers[0] * numbers[i] === c) && numbers[i] === 0 ) {
+      return [numbers[0], 0];
+    }
+
+    checked[numbers[i]] = 1;
+  }
+
+  if( res.length > 0 ) {
+    return res.sort(function([a,b],[c,d]){return a-c;})[0];
+  }
+
+  return null;
+
+};
+
 console.log(findAB([1,2,3],3), [1,3]);
 console.log(findAB([1,2,3],6), [2,3]);
 console.log(findAB([1,2,3],7), null);
