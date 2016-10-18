@@ -37,28 +37,28 @@ function findAB(numbers,c) {
 
 };
 
-// time over
+// fastest code
 function findAB(numbers,c) {
   var checked = {};
   var res = [];
 
-  for( var i = 0; i < numbers.length; ++i ) {
+  numbers = numbers.filter(function(v){return c % v === 0 || v === 0;});
 
-    var val = c / numbers[i];
+  for( let i = 0; i < numbers.length; ++i ) {
 
-    if( val === -0 ) val = 0;
+    let val = c / numbers[i];
 
     if( checked[val] ) {
       res.push( [ val, numbers[i] ] );
     }
-    else if( (numbers[0] * numbers[i] === c) && numbers[i] === 0 ) {
+    else if( numbers[i] === 0 && (numbers[0] * numbers[i] === c) ) {
       return [numbers[0], 0];
     }
 
     checked[numbers[i]] = 1;
   }
 
-  if( res.length > 0 ) {
+  if( res.length >= 1 ) {
     return res.sort(function([a,b],[c,d]){return a-c;})[0];
   }
 
@@ -76,3 +76,15 @@ console.log(findAB([0,0,2,2],4), [2,2]);
 console.log(findAB([-3,-2,-2,-1,0,1,2,3,4],4), [-2,-2]);
 console.log(findAB([-3,-2,-2,-1,0,1,2,3,4],0), [-3,0]);
 console.log(findAB([-3,-2,-1,0,1,2,3,4],4), [1,4]);
+
+// best practice
+_ = require('lodash')
+
+function findAB(numbers,c){
+  for(let i = 0, x; i < numbers.length; i++){
+    x = numbers[i];
+    let j = _.indexOf(numbers, c/x, true);
+    if(j > -1 && j != i) return [x,c/x];
+  }
+  return null
+}
