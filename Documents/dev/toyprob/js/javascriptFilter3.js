@@ -30,19 +30,25 @@ https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects
 
 function searchNames( logins ) {
 
-  var dot = '.';
+  var users = logins.filter(function(v) {
+    return v[0] == '.' || v[v.length-1] == '.' ? true : false;
+  });
 
-  var users = logins.filter( function(v) {
+  users = users.join('#').replace(/\./g, "").split('#');
 
-    if( v[0] == dot || v[v.length-1] == dot )
-      v = v.replace('/'.'/g','');
+  var res = logins.filter(function(v) {
+    var user = v.slice(0, v.indexOf('@'));
+    return v.includes("@") && user.includes(users[0]);
+  });
 
-    return v.include('@') && v.include();
-  } );
-
-  console.log(logins, users);
-
-  return users;
+  return res;
 };
 
 module.exports = searchNames;
+
+// best practice
+function searchNames( logins ){
+  return logins.filter(function(el, index, arr) {
+    return index % 2 === 1 && arr[index - 1].match(/^\.|\.$/);
+  });
+}
