@@ -28,25 +28,76 @@ helper.pageIndex(-10); //should == -1
 // The constructor takes in an array of items and a integer indicating how many
 // items fit within a single page
 function PaginationHelper(collection, itemsPerPage){
-  this.collection = collection;
+  this.length = collection.length;
   this.itemsPerPage = itemsPerPage;
 };
 
 PaginationHelper.prototype.itemCount = function() {
-  return this.collection.length;
+  return this.length;
 };
 
 PaginationHelper.prototype.pageCount = function() {
-  return this.collection.length / this.itemsPerPage;
+  var pageCount = Math.ceil(this.length / this.itemsPerPage);
+  this.pageCount = pageCount;
+  return pageCount;
 };
 
 PaginationHelper.prototype.pageItemCount = function(n) {
-  return n != this.PageCount() - 1 ? this.itemsPerPage :
-                                     this.collection.length % this.itemsPerPage;
+   var itemCount;
+   if( n >= this.pageCount || n < 0 )
+     itemCount = -1;
+   else {
+     if( n < this.pageCount - 1 )
+       itemCount = this.itemsPerPage;
+     else
+       itemCount = this.length % this.itemsPerPage;
+   }
+
+   return itemCount;
 };
 
 PaginationHelper.prototype.pageIndex = function(n) {
-  if( n < this.itemCount() || n > this.itemCount() )
-    return -1;
-  return n % this.itemsPerPage;
+  var pageIndex;
+  if( n < 0 || n >= this.length )
+    pageIndex = -1;
+  else {
+    if( n < this.itemsPerPage )
+      pageIndex = 0;
+    else {
+      if( n % this.itemsPerPage === 0 )
+        pageIndex = n / this.itemsPerPage - 1;
+      else
+        pageIndex = Math.ceil(n / this.itemsPerPage) - 1 ;
+    }
+  }
+
+  console.log( this.length, this.itemsPerPage, n, pageIndex );
+  return pageIndex;
 };
+
+module.exports = PaginationHelper;
+
+// best practice
+function PaginationHelper(collection, itemsPerPage){
+  this.collection = collection, this.itemsPerPage = itemsPerPage;
+}
+
+PaginationHelper.prototype.itemCount = function() {
+  return this.collection.length;
+}
+
+PaginationHelper.prototype.pageCount = function() {
+  return Math.ceil(this.collection.length / this.itemsPerPage);
+}
+
+PaginationHelper.prototype.pageItemCount = function(pageIndex) {
+  return pageIndex < this.pageCount()
+    ? Math.min(this.itemsPerPage, this.collection.length - pageIndex * this.itemsPerPage)
+    : -1;
+}
+
+PaginationHelper.prototype.pageIndex = function(itemIndex) {
+  return itemIndex < this.collection.length && itemIndex >= 0
+    ? Math.floor(itemIndex / this.itemsPerPage)
+    : -1;
+}
