@@ -38,18 +38,19 @@ Warrior = function(name){
 Warrior.prototype = {
   attack: function(enemy, position){
     if (enemy.block != position){
-      var damage = position == Position.high ? 10 : 5;
+      let damage = position === Position.high ? 10 : 5;
       // if enemy is not blocking at all then give more damage
       if (!enemy.block){
         damage += 5;
       }
-      setHealth.call(enemy.health - damage);
+      //setHealth.call(enemy.health - damage);
+      enemy.setHealth(enemy.health - damage);
     }
   }
 }
 
 // private functions
-function setHealth(value){
+Warrior.prototype.setHealth = function(value){
   this.health = Math.max(0, value);
   if (this.health == 0){
     this.deceased = true;
@@ -61,3 +62,17 @@ function setHealth(value){
 };
 
 module.exports = Warrior;
+
+// best practice
+Warrior.prototype = {
+  attack: function(enemy, position){
+    if (enemy.block != position){
+      var damage = position == Position.high ? 10 : 5;
+      // if enemy is not blocking at all then give more damage
+      if (!enemy.block){
+        damage += 5;
+      }
+      setHealth.call(enemy, enemy.health - damage);
+    }
+  }
+}

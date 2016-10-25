@@ -1,6 +1,6 @@
-var chai = rquire('chai');
+var chai = require('chai');
 var assert = chai.assert;
-var Warrior = require('Warrior');
+var Warrior = require('../js/ninja_samurai.js');
 
 describe("First attack", function() {
   ninja = new Warrior('Hanzo Hattori');
@@ -9,7 +9,7 @@ describe("First attack", function() {
   samurai.block = 'l';
   ninja.attack(samurai, 'h');
 
-  .it("Expected samurai health to equal 90", function() {
+  it("Expected samurai health to equal 90", function() {
     assert.equal( samurai.health, 90 );
   });
 
