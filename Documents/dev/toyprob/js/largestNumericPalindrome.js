@@ -42,24 +42,96 @@ Array.prototype.move = function(from, to) {
     return this;
 };
 
-function permute( arr ) {
-  var permutations = [];
+// function permute( arr ) {
+//   var permutations = [];
+//
+//   if( arr.length === 1 ) {
+//     return [ arr ];
+//   }
+//
+//   for( var i = 0; i <  arr.length; i++ ) {
+//     var subPerms = permute( arr.slice(0, i).concat( arr.slice( i + 1 ) ) );
+//     for( var j = 0; j < subPerms.length; j++ ) {
+//       subPerms[j].unshift( arr[i] );
+//       permutations.push( subPerms[j] );
+//     }
+//   }
+//
+//   return permutations;
+// };
 
-  if( arr.length === 1 ) {
-    return [ arr ];
-  }
+// function permute(nums, matrix) {
+//   if( nums.length == 0 )
+//     return matrix;
+//
+//   let numToInsert = nums.shift();
+//   let newMatrix = [];
+//
+//   matrix.forEach( (array,i) => {
+//     if( i % 2 === 0 ) {
+//       for( let i = array.length; i >= 0; --i ) {
+//         let copiedArray = array.slice();
+//         copiedArray.splice(i,0,numToInsert);
+//         newMatrix.push(copiedArray);
+//       }
+//     }
+//     else {
+//       for( let i = 0; i <= array.length; ++i ) {
+//         let copiedArray = array.slice();
+//         copiedArray.splice(i,0,numToInsert);
+//         newMatrix.push(copiedArray);
+//       }
+//     }
+//   });
+//
+//   return permute( nums, newMatrix );
+// };
+//
+// function permutations(string) {
+//   return permute(string.split(''), [[]]);
+// };
 
-  for( var i = 0; i <  arr.length; i++ ) {
-    var subPerms = permute( arr.slice(0, i).concat( arr.slice( i + 1 ) ) );
-    for( var j = 0; j < subPerms.length; j++ ) {
-      subPerms[j].unshift( arr[i] );
-      permutations.push( subPerms[j] );
+function perms(data) {
+    if (!(data instanceof Array)) {
+        throw new TypeError("input data must be an Array");
     }
-  }
 
-  return permutations;
+    data = data.slice();  // make a copy
+    var permutations = [],
+        stack = [];
+
+    function doPerm() {
+        if (data.length == 0) {
+            permutations.push(stack.slice());
+        }
+        for (var i = 0; i < data.length; i++) {
+            var x = data.splice(i, 1);
+            stack.push(x);
+            doPerm();
+            stack.pop();
+            data.splice(i, 0, x);
+        }
+    }
+
+    doPerm();
+    return permutations;
 };
 
+function unique(value, index, self) {
+  return self.indexOf(value) === index;
+};
+
+function permutations(string) {
+  var input = string.split('');
+  var result = perms(input);
+
+  for (var i = 0; i < result.length; i++) {
+      result[i] = result[i].join('');
+  }
+
+  return result.filter( unique );;
+
+}
 
 var numericPalindrome = function() {
 
@@ -83,15 +155,18 @@ var numericPalindrome = function() {
   let answer = [];
 
   combi.forEach( function(n) {
-    var arr = `${n}`.split('');
-    var permus = permute(arr);
+
+    //var arr = `${n}`.split('');
+    var permus = permutations(n.toString());
+    //console.log(permus);
 
     for( var i = 0; i < permus.length; i++ ) {
-      var str = parseInt(permus[i].join('')).toString();
-      //console.log(str);
+      var str = parseInt(permus[i]).toString();
+      console.log(str);
       if( str === str.split('').reverse().join('')  )
         answer.push( parseInt( str ));
     }
+
   });
 
   console.log(answer);
