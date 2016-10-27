@@ -42,35 +42,61 @@ The order of the permutations doesn't matter.
 // function permutations(string) {
 //   return permute(string.split(''), [[]]);
 // };
+
+
+// ES6 generator
+// function* permutations(string) {
+//
+//   for( var cutpoints = 0; cutpoints < (1 << (string.length - 1)); cutpoints++ ) {
+//     var result = [];
+//     var lastcut = 0;
+//
+//     for( var i = 0; i < string.length - 1; i++ ) {
+//       if( ((1 << i) & cutpoints) !== 0 ) {
+//           result.push( string.slice(lastcut, i + 1) );
+//           lastcut = i + 1;
+//       }
+//     }
+//     result.push( string.slice(lastcut) );
+//     yield result;
+//   }
+// }
+//
+// for( var partition of permutations("abcd") ) {
+//     console.log(partition);
+// }
+
+// passed
 function perms(data) {
-    if( !Array.isArray(data) ) {
-      throw new TypeError("input data must be an Array");
+
+  if( !Array.isArray(data) ) {
+    throw new TypeError("input data must be an Array");
+  }
+
+  data = data.slice();  // make a copy
+  var permutations = [];
+  var stack = [];
+
+  function doPerm() {
+
+    if( data.length == 0 ) {
+      permutations.push( stack.slice() );
     }
 
-    data = data.slice();  // make a copy
-    var permutations = [];
-    var stack = [];
+    for( var i = 0; i < data.length; i++ ) {
+      var x = data.splice(i, 1);
+      stack.push(x);
 
-    function doPerm() {
+      doPerm();
 
-      if( data.length == 0 ) {
-        permutations.push( stack.slice() );
-      }
-
-      for( var i = 0; i < data.length; i++ ) {
-        var x = data.splice(i, 1);
-        stack.push(x);
-
-        doPerm();
-
-        stack.pop();
-        data.splice(i, 0, x);
-      }
+      stack.pop();
+      data.splice(i, 0, x);
     }
+  }
 
-    doPerm();
-    
-    return permutations;
+  doPerm();
+
+  return permutations;
 };
 
 function unique(value, index, self) {
@@ -88,5 +114,6 @@ function permutations(string) {
   return result.filter( unique );;
 
 };
+
 
 module.exports = permutations;

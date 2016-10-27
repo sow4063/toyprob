@@ -91,30 +91,36 @@ Array.prototype.move = function(from, to) {
 //   return permute(string.split(''), [[]]);
 // };
 
-function perms(data) {
-    if (!(data instanceof Array)) {
-        throw new TypeError("input data must be an Array");
+function perms(arr) {
+  if( !Array.isArray(arr) ) {
+      throw new TypeError("input data must be an Array");
+  }
+
+  arr = arr.slice();
+
+  var permutations = [];
+  var stack = [];
+
+  function permute() {
+
+    if( arr.length === 0 ) {
+      permutations.push( stack.slice() );
     }
 
-    data = data.slice();  // make a copy
-    var permutations = [],
-        stack = [];
+    for( var i = 0; i < arr.length; i++ ) {
+      var x = arr.splice(i, 1);
+      stack.push(x);
 
-    function doPerm() {
-        if (data.length == 0) {
-            permutations.push(stack.slice());
-        }
-        for (var i = 0; i < data.length; i++) {
-            var x = data.splice(i, 1);
-            stack.push(x);
-            doPerm();
-            stack.pop();
-            data.splice(i, 0, x);
-        }
+      permute();
+
+      stack.pop();
+      arr.splice(i, 0, x);
     }
+  }
 
-    doPerm();
-    return permutations;
+  permute();
+
+  return permutations;
 };
 
 function unique(value, index, self) {
@@ -131,7 +137,7 @@ function permutations(string) {
 
   return result.filter( unique );;
 
-}
+};
 
 var numericPalindrome = function() {
 
@@ -156,13 +162,11 @@ var numericPalindrome = function() {
 
   combi.forEach( function(n) {
 
-    //var arr = `${n}`.split('');
     var permus = permutations(n.toString());
-    //console.log(permus);
 
     for( var i = 0; i < permus.length; i++ ) {
       var str = parseInt(permus[i]).toString();
-      console.log(str);
+      //console.log(str);
       if( str === str.split('').reverse().join('')  )
         answer.push( parseInt( str ));
     }
