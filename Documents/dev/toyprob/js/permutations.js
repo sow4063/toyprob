@@ -40,7 +40,13 @@ The order of the permutations doesn't matter.
 // };
 //
 // function permutations(string) {
-//   return permute(string.split(''), [[]]);
+//   var res = permute(string.split(''), [[]]);
+//
+//   for( var i = 0; i < res.length; i++ ) {
+//     res[i] = res[i].join('');
+//   }
+//
+//   return res.filter( unique );
 // };
 
 
@@ -67,30 +73,36 @@ The order of the permutations doesn't matter.
 // }
 
 // passed
-function perms(data) {
 
-  if( !Array.isArray(data) ) {
+function unique(value, index, self) {
+  return self.indexOf(value) === index;
+};
+
+function perms(arr) {
+
+  if( !Array.isArray(arr) ) {
     throw new TypeError("input data must be an Array");
   }
 
-  data = data.slice();  // make a copy
+  arr = arr.slice();
+
   var permutations = [];
   var stack = [];
 
   function doPerm() {
 
-    if( data.length == 0 ) {
+    if( arr.length == 0 ) {
       permutations.push( stack.slice() );
     }
 
-    for( var i = 0; i < data.length; i++ ) {
-      var x = data.splice(i, 1);
+    for( var i = 0; i < arr.length; i++ ) {
+      var x = arr.splice(i, 1);
       stack.push(x);
 
       doPerm();
 
       stack.pop();
-      data.splice(i, 0, x);
+      arr.splice(i, 0, x);
     }
   }
 
@@ -99,21 +111,31 @@ function perms(data) {
   return permutations;
 };
 
-function unique(value, index, self) {
-  return self.indexOf(value) === index;
-};
-
 function permutations(string) {
   var input = string.split('');
-  var result = perms(input);
+  var results = perms(input);
 
-  for( var i = 0; i < result.length; i++ ) {
-      result[i] = result[i].join('');
+  for( var i = 0; i < results.length; i++ ) {
+    results[i] = results[i].join('');
   }
 
-  return result.filter( unique );;
+  return results.filter( unique );
 
 };
 
-
 module.exports = permutations;
+
+// best practice
+function permutations(string) {
+  var arr = string.split(''), tmp = arr.slice(), heads = [], out = [];
+  if(string.length == 1) return [string];
+  arr.forEach(function(v, i, arr) {
+    if(heads.indexOf(v) == -1) {
+      heads.push(v);
+      tmp.splice(tmp.indexOf(v), 1);
+      permutations(tmp.join('')).forEach(function(w) {out.push(v + w);});
+      tmp.push(v);
+    }
+  });
+  return out;
+}
