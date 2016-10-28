@@ -33,67 +33,20 @@ so you will need to work on optimization to be able to make it in the alloted ti
 Dealing with 1s and 0s when passed as parameters in a smart way could help. A lot.
 */
 
+//
+// Array.prototype.move = function(from, to) {
+//     this.splice(to, 0, this.splice(from, 1)[0]);
+//     return this;
+// };
+
 function unique(value, index, self) {
   return self.indexOf(value) === index;
 };
 
-Array.prototype.move = function(from, to) {
-    this.splice(to, 0, this.splice(from, 1)[0]);
-    return this;
-};
-
-// function permute( arr ) {
-//   var permutations = [];
-//
-//   if( arr.length === 1 ) {
-//     return [ arr ];
-//   }
-//
-//   for( var i = 0; i <  arr.length; i++ ) {
-//     var subPerms = permute( arr.slice(0, i).concat( arr.slice( i + 1 ) ) );
-//     for( var j = 0; j < subPerms.length; j++ ) {
-//       subPerms[j].unshift( arr[i] );
-//       permutations.push( subPerms[j] );
-//     }
-//   }
-//
-//   return permutations;
-// };
-
-// function permute(nums, matrix) {
-//   if( nums.length == 0 )
-//     return matrix;
-//
-//   let numToInsert = nums.shift();
-//   let newMatrix = [];
-//
-//   matrix.forEach( (array,i) => {
-//     if( i % 2 === 0 ) {
-//       for( let i = array.length; i >= 0; --i ) {
-//         let copiedArray = array.slice();
-//         copiedArray.splice(i,0,numToInsert);
-//         newMatrix.push(copiedArray);
-//       }
-//     }
-//     else {
-//       for( let i = 0; i <= array.length; ++i ) {
-//         let copiedArray = array.slice();
-//         copiedArray.splice(i,0,numToInsert);
-//         newMatrix.push(copiedArray);
-//       }
-//     }
-//   });
-//
-//   return permute( nums, newMatrix );
-// };
-//
-// function permutations(string) {
-//   return permute(string.split(''), [[]]);
-// };
-
 function perms(arr) {
+
   if( !Array.isArray(arr) ) {
-      throw new TypeError("input data must be an Array");
+    throw new TypeError("input data must be an Array");
   }
 
   arr = arr.slice();
@@ -123,19 +76,21 @@ function perms(arr) {
   return permutations;
 };
 
-function unique(value, index, self) {
-  return self.indexOf(value) === index;
+function flatten(){
+  return [].slice.call(arguments).reduce(function(a,b){
+    return a.concat(Array.isArray(b) ? flatten.apply(null,b) : b);
+  },[]);
 };
 
-function permutations(string) {
-  var input = string.split('');
-  var result = perms(input);
+function permutations(array) {
+  //var input = string.split('');
+  var results = perms(array);
 
-  for (var i = 0; i < result.length; i++) {
-      result[i] = result[i].join('');
+  for( var i = 0; i < results.length; i++ ) {
+    results[i] = flatten( results[i] ).join('');
   }
 
-  return result.filter( unique );;
+  return results.filter( unique );
 
 };
 
@@ -145,39 +100,91 @@ var numericPalindrome = function() {
   var args = Array.prototype.slice.call(arguments);
   var combi = [];
 
+  var products = args.reduce( function(a,b) { return a * (b===0?1:b); } );
+  // if( products.toString() == products.toString().split('').reverse().join('') )
+  //   return products;
+
+  combi.push( products );
+
   for( var i = 0; i < args.length; i++ ) {
     for( var j = i+1; j < args.length; j++ ) {
       combi.push( args[i] * args[j] );
     }
   }
 
-  combi.push( args.reduce(function(a,b) { return a*b; }) );
-
   combi = combi.filter( unique );
+  combi.sort( function(a,b){return b-a;} );
 
   console.log( 'args = ', args,'combi = ', combi );
 
   // find palindrome
   let answer = [];
+  var largest = 1;
 
   combi.forEach( function(n) {
+  //for( var k = 0; k < combi.length; k++ ) {
 
-    var permus = permutations(n.toString());
+    var numbers = [...n + ""].map(v => +v);
+    //var numbers = [ combi[k] + ""].map(v => +v);
+    var nums = [];
 
-    for( var i = 0; i < permus.length; i++ ) {
-      var str = parseInt(permus[i]).toString();
-      //console.log(str);
-      if( str === str.split('').reverse().join('')  )
-        answer.push( parseInt( str ));
+    for( var i = 0; i < Math.pow( 2, numbers.length ); i++ ) {
+
+      var bin = (i).toString(2);
+      var set = [];
+
+      bin = new Array( ( numbers.length - bin.length ) + 1 ).join("0") + bin;
+
+      for( var j = 0; j < bin.length; j++ ) {
+        if( bin[j] === "1" ) {
+            set.push( numbers[j] );
+        }
+      }
+
+      nums.push(set);
     }
 
-  });
+    // find the palindrome.
+    nums = nums.slice(1);
 
-  console.log(answer);
+    nums.sort(function(a,b){return b.length - a.length;});
+    //console.log(nums);
+
+    for( var i = 0; i < nums.length; i++ ) {
+
+      var permus = permutations( nums[i] );
+      permus.sort( function(a,b){return b.length - a.length;} );
+      //console.log(permus);
+
+      for( var j = 0; j < permus.length; j++ ) {
+        //console.log(permus[j]);
+        var str = parseInt( permus[j] ).toString();
+
+        if( str === str.split('').reverse().join('')  ) {
+          console.log(str);
+
+          // if( largest < parseInt( str ) )
+          //   largest = parseInt( str );
+          //
+          // if( largest.toString().length > str.length ) {
+          //   console.log('the largest is = ', largest);
+          //   return largest;
+          // }
+
+          answer.push( parseInt( str ) );
+        }
+
+      }
+
+    }
+
+  //}
+  } );
 
   let max = Math.max(...answer);
 
   return max;
 };
+
 
 module.exports = numericPalindrome;
