@@ -101,8 +101,6 @@ var numericPalindrome = function() {
   var combi = [];
 
   var products = args.reduce( function(a,b) { return a * (b===0?1:b); } );
-  // if( products.toString() == products.toString().split('').reverse().join('') )
-  //   return products;
 
   combi.push( products );
 
@@ -115,7 +113,7 @@ var numericPalindrome = function() {
   combi = combi.filter( unique );
   combi.sort( function(a,b){return b-a;} );
 
-  console.log( 'args = ', args,'combi = ', combi );
+  //console.log( 'args = ', args,'combi = ', combi );
 
   // find palindrome
   let answer = [];
@@ -161,7 +159,7 @@ var numericPalindrome = function() {
         var str = parseInt( permus[j] ).toString();
 
         if( str === str.split('').reverse().join('')  ) {
-          console.log(str);
+          //console.log(str);
 
           // if( largest < parseInt( str ) )
           //   largest = parseInt( str );
