@@ -37,18 +37,4 @@ var blackCard = function(array, num) {
 
 };
 
-console.log( blackCard(['길동', '철수'], 1 ) );
-console.log( blackCard(['길동', '철수'], 2 ) );
-console.log( blackCard(['길동', '철수'], 3 ) );
-
-console.log( blackCard(['길동', '철수', '영희'], 2 ) );
-console.log( blackCard(['길동', '철수', '영희'], 3 ) );
-console.log( blackCard(['길동', '철수', '영희'], 4 ) );
-
-console.log( blackCard(['길동', '철수', '영희', '남우'], 3 ) );
-console.log( blackCard(['길동', '철수', '영희', '남우'], 4 ) );
-console.log( blackCard(['길동', '철수', '영희', '남우'], 5 ) );
-
-console.log( blackCard(['길동', '철수', '영희', '남우', '여우'], 4 ) );
-console.log( blackCard(['길동', '철수', '영희', '남우', '여우'], 5 ) );
-console.log( blackCard(['길동', '철수', '영희', '남우', '여우'], 6 ) );
+module.exports = blackCard;
