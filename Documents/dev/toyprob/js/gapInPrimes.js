@@ -72,37 +72,61 @@ https://en.wikipedia.org/wiki/Prime_gap
 //   return null;
 //
 // };
+
+function isPrime(n) {
+ if( isNaN(n) || !isFinite(n) || n % 1 || n < 2 )
+  return false;
+
+ if( n % 2 === 0 )
+  return n === 2;
+
+ if( n % 3 === 0 )
+  return n === 3;
+
+ var m = Math.sqrt(n);
+
+ for( var i = 5; i <= m; i += 6 ) {
+  if( n % i === 0 )
+    return false;
+  if( n % (i + 2) === 0 )
+    return false;
+ }
+
+ return true;
+
+};
+
 function gap(g,m,n) {
-  var cnt = 0;
   var prime = [];
-  prime.push(2);
 
-  for( var i = 2; i <= n; i++ ) {
-    for( var j = 0; j < prime.length; j++ ) {
-        if( i % prime[j] === 0 ) {
-            break;
-        }
-
-        if( j + 1 === prime.length ) {
-          prime.push(i);
-        }
-    }
+  for(var i = m; i <= n; i++ ) {
+    if( isPrime(i) )
+      prime.push(i);
   }
-
-  prime = prime.filter(function(val) {
-    return val !== 0 && val > m;
-  });
-
-  console.log(prime);
 
   for( i = 0; i < prime.length - 1; i++ ) {
     if( prime[i] + g === prime[i + 1] )
-      return [prime[i], prime[i + 1]];
+      return [prime[i], prime[i + 1] ];
   }
 
   return null;
 
 };
 
-
 module.exports = gap;
+
+// best practice
+function gap(g, m, n) {
+    var lastPrime = 0;
+    var isPrime = function(x) {
+      for (var i=2; i*i<=x; i++) { if (x % i == 0) return false; } return true;
+    }
+
+    for(var i = m; i <= n; i++)
+        if(isPrime(i)) {
+            if(i - lastPrime == g) return [lastPrime, i];
+            else lastPrime = i;
+        }
+
+    return null;
+}

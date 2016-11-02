@@ -4,7 +4,6 @@ var gap = require('../js/gapInPrimes.js');
 
 describe("Gap", function() {
 
-
   it("Basic tests",function() {
     assert.equal(gap(2,100,110), [101, 103]);
   });
@@ -26,9 +25,13 @@ describe("Gap", function() {
     assert.equal(gap(10,300,400), [337, 347]);
   });
 
+  it("Large Number tests",function() {
+    assert.equal(gap(6,262127,362127), [262127, 262133]);
+  });
+
   it("Big Number tests",function() {
     this.timeout(1200);
-    assert.equal(gap(2,10000000,11000000), [101, 103]);
+    assert.equal(gap(2,10000000,11000000), [ 10000139, 10000141 ]);
   });
 
 });
