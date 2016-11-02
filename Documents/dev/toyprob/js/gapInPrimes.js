@@ -42,35 +42,67 @@ Ref
 https://en.wikipedia.org/wiki/Prime_gap
 */
 
-function gap(g, m, n) {
-  var arr = new Array(n);
-  var i = 2;
+// function gap(g, m, n) {
+//   var arr = new Array(n-m);
+//   var i = 2;
+//
+//   for( i = m; i <= n; i ++ ) {
+//     arr[i] = i;
+//   }
+//
+//   for( i = 2; i <= Math.sqrt(n); i++ ) {
+//     if( arr[i] === 0 )
+//       continue;
+//     for( var j = i + i; j <= n; j += i ) {
+//       arr[j] = 0;
+//     }
+//   }
+//
+//   arr = arr.filter(function(val) {
+//     return val !== 0 && val > m;
+//   });
+//
+//   console.log(arr);
+//
+//   for( i = 0; i < arr.length - 1; i++ ) {
+//     if( arr[i] + g === arr[i + 1] )
+//       return [arr[i], arr[i + 1] ];
+//   }
+//
+//   return null;
+//
+// };
+function gap(g,m,n) {
+  var cnt = 0;
+  var prime = [];
+  prime.push(2);
 
-  for( i = 2; i <= n; i++ ) {
-    arr[i] = i;
-  }
+  for( var i = 2; i <= n; i++ ) {
+    for( var j = 0; j < prime.length; j++ ) {
+        if( i % prime[j] === 0 ) {
+            break;
+        }
 
-  for( i = 2; i <= n; i++ ) {
-    if( arr[i] === 0 )
-      continue;
-    for( var j = i + i; j <= n; j += i ) {
-      arr[j] = 0;
+        if( j + 1 === prime.length ) {
+          prime.push(i);
+        }
     }
   }
 
-  arr = arr.filter(function(val) {
+  prime = prime.filter(function(val) {
     return val !== 0 && val > m;
   });
 
-  console.log(arr);
+  console.log(prime);
 
-  for( i = 0; i < arr.length - 1; i++ ) {
-    if( arr[i] + g === arr[i + 1] )
-      return [ arr[i], arr[i + 1] ];
+  for( i = 0; i < prime.length - 1; i++ ) {
+    if( prime[i] + g === prime[i + 1] )
+      return [prime[i], prime[i + 1]];
   }
 
   return null;
 
 };
+
 
 module.exports = gap;
