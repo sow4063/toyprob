@@ -41,6 +41,10 @@ public class paneracli
 	        	}
 	        	else {
 	        		System.out.println("Not Found the file info in the cache = [" + name + "]");
+	        		
+	        		// receiving a file from the server.
+		            fileName = "test.txt";
+		            //pan.receiveFile(fileName);
 	        	}
 	        	
 	        	
@@ -53,6 +57,7 @@ public class paneracli
 	            System.out.println("===================================================================");
 	            System.out.println( i + "th running end.");
 	            System.out.println("===================================================================");
+	          
 			}
 			
 		}

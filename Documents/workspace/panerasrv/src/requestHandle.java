@@ -20,6 +20,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Enumeration;
@@ -158,6 +159,12 @@ public class requestHandle implements Runnable {
                         
                         break;
                         
+                    case 5:
+                    	
+                        selectFileInfo();
+                        
+                        break;
+                        
                     default:
                         System.out.println("Incorrect command received.");
                         break;
@@ -215,6 +222,106 @@ public class requestHandle implements Runnable {
 		
 		return encrypted;
 	}
+    
+public void selectFileInfo() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
+    	
+    	System.out.println("selectFileInfo begin.");
+    	
+    	try {
+        	
+            DataInputStream clientData = new DataInputStream( clientSocket.getInputStream() );
+
+            String fileInfo = in.readLine();
+            //clientData.readUTF();
+            //clientData.close();
+            
+            String fileName = "";
+            String createDate = "";
+            
+            String[] arr;
+			arr = fileInfo.split( DELIMITER );
+			
+			fileName = arr[0];
+			createDate = arr[1];
+			
+			System.out.println("file info = " + fileName + "[" + createDate + "] received from the client");
+            
+            // save the received file info into database
+            String result = "RET_OK";
+            
+            //
+            try
+            {
+            	// create a mysql database connection
+            	String url = "jdbc:mysql://localhost:3306/chanko";
+	            String driver = "com.mysql.jdbc.Driver";
+	            String userName = "root";
+	            String password = "1q2w3e4r";
+	            
+	            Class.forName(driver).newInstance();
+	            Connection conn = null;
+	            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/chanko?" + "user=root&password=1q2w3e4r");
+                
+	            System.out.println("데이터 베이스 접속이 성공했습니다."); 
+	        
+	            // the mysql insert statement
+	            String query = " select encfilename, filePath from files where fileName = ? and createDate = ?";
+	
+	            // create the mysql insert preparedstatement
+	            PreparedStatement preparedStmt = ((java.sql.Connection) conn).prepareStatement(query);
+	            preparedStmt.setString (1, fileName);
+	            preparedStmt.setString (2, createDate);
+	            
+	            // execute select SQL stetement
+				ResultSet rs = preparedStmt.executeQuery();
+
+				while( rs.next() ) {
+
+					String encFileName = rs.getString("encfilename");
+					String filePath = rs.getString("filepath");
+
+					System.out.println("encFileName : " + encFileName);
+					System.out.println("filePath    : " + filePath);
+					
+					result = encFileName + DELIMITER + filePath;
+
+				}
+	          
+                conn.close();
+            }
+            catch (SQLException ex) {
+                // handle any errors
+                System.out.println("SQLException: " + ex.getMessage());
+                System.out.println("SQLState: " + ex.getSQLState());
+                System.out.println("VendorError: " + ex.getErrorCode());
+                
+                result = "RET_NG";
+            }
+              
+            //
+            
+            // Sending the result to client.
+            byte[] buffers = new byte[(int) result.length()];
+            
+            OutputStream os = clientSocket.getOutputStream();
+            DataOutputStream dos = new DataOutputStream( os );
+           
+            dos.writeUTF( result );
+            dos.writeLong( buffers.length );
+            dos.write( buffers, 0, buffers.length );
+            dos.flush();
+            
+            clientData.close();
+
+            System.out.println("sent the result [" + result + "] to the client.");
+        } 
+        catch( IOException ex ) {
+            System.err.println("Client error. Connection closed.");
+        }
+
+    	System.out.println("selectFileInfo end.");
+    }
+
 	
     public void saveFileInfo() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
     	
@@ -284,7 +391,11 @@ public class requestHandle implements Runnable {
                 System.out.println("SQLException: " + ex.getMessage());
                 System.out.println("SQLState: " + ex.getSQLState());
                 System.out.println("VendorError: " + ex.getErrorCode());
-                result = "RET_NG";
+                
+                if( ex.getSQLState().equals("23000") )
+                	result = "RET_OK:23000";
+                else
+                	result = "RET_NG";
             }
               
             //

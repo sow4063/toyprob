@@ -46,6 +46,7 @@ public class panera
     public static final String SRT_RECV = "2";
     public static final String SRT_SRVINF = "3";
     public static final String SRT_SAVEINF = "4";
+    public static final String SRT_RCVINF = "5";
     
 	public panera() throws Exception {
 		
@@ -259,16 +260,63 @@ public class panera
 		System.out.println("saveCache end.");
 	}
 	
+public String receiveFileInfo(String fileName, String createDate ) throws IOException {
+		
+		System.out.println("receiveFileInfo begin.");
+		
+		String result = "";
+		
+		// establish connection to server
+		try {
+			sock = new Socket( agentIP, Integer.parseInt( agentPort ) );
+		}
+		catch(Exception e) {
+			System.err.println("Can not connect to agent server, try again later.");
+			System.exit(1);
+		}
+		
+		os = new PrintStream( sock.getOutputStream() );
+		
+		String fileInfo = fileName + DELIMITER + createDate;
+		
+		os.println(SRT_RCVINF);
+		os.println(fileInfo);
+        
+		// read the result
+		try {
+        	
+            InputStream in = sock.getInputStream();
+
+            DataInputStream clientData = new DataInputStream( in );
+            
+            result = clientData.readUTF();
+            
+            in.close();
+            
+            System.out.println("ReceiveInfo result = [" + result + "] received from Agent Server.");
+        } 
+        catch( IOException ex ) {
+            Logger.getLogger("PaneraClient").log( Level.SEVERE, null, ex ) ;
+        }
+		
+		sock.close();
+		
+		System.out.println("receiveFileInfo end.");
+		
+		return result;
+	}
+
+	
 	public void sendFileInfo(String fileName, String encryptedFileName, String createDate ) throws IOException {
 		
 		System.out.println("sendFileInfo begin.");
 		
 		// establish connection to server
 		try {
-			sock = new Socket( serverIP, Integer.parseInt( serverPort ) );
+			sock = new Socket( agentIP, Integer.parseInt( agentPort ) );
 		}
 		catch(Exception e) {
-			System.err.println("Can not connect to server, try again later.");
+			System.err.println("Can not connect to agent server, try again later.");
 			System.exit(1);
 		}
 		
@@ -288,7 +336,7 @@ public class panera
             
             String result = clientData.readUTF();
             
-            in.close();System.out.println("saveFileInfo#8");
+            in.close();
 
             System.out.println("SaveInfo result = [" + result + "] received from Agent Server.");
         } 

@@ -20,7 +20,7 @@ public class paneracli
 				
 				// sending a file to the server.
 				String fileName = "/Users/water4063/Documents/secure_sw/panera/test.txt";
-				//pan.sendFile( fileName );
+				pan.sendFile( fileName );
 				
 				// fileName, encryptedFilename, date
 				int index = fileName.lastIndexOf("/");
@@ -41,6 +41,21 @@ public class paneracli
 	        	}
 	        	else {
 	        		System.out.println("Not Found the file info in the cache = [" + name + "]");
+	        		
+	        		// receiving a file from the server.
+		            String fileInfo = pan.receiveFileInfo(name, createDate);
+		            String[] arr;
+					arr = fileInfo.split( panera.DELIMITER );
+					
+					String encFileName = arr[0];
+					String fileServerIP = arr[1];
+					String fileServerPort = arr[2];
+					
+					System.out.println("FileName = [" + name + "]");
+		            System.out.println("encFileName = [" + encFileName + "]");
+		            System.out.println("encFileName = [" + fileServerIP + "]");
+		            System.out.println("encFileName = [" + fileServerPort + "]");
+		            System.out.println("createDate  = [" + createDate + "]");
 	        	}
 	        	
 	        	
