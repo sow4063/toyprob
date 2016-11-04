@@ -201,22 +201,23 @@ public class panera
 		
 		System.out.println("checkCache begin.");
 		
-		String[] arr;
+		//String[] arr;
 		
 		String name = base64encode( serverIP + DELIMITER + serverPort + DELIMITER + fileName + DELIMITER + encryptedFileName + DELIMITER + createDate);
 		
 		File file = new File( cachePath + name );
 		if( file.exists() && !file.isDirectory() ) { 
 		 
-		    arr = base64decode( name ).split( DELIMITER );
-		    
-		    for(int i = 0; i < arr.length; i++ ) {
-		    	System.out.println(arr[i]);
-		    }
+//		    arr = base64decode( name ).split( DELIMITER );
+//		    
+//		    for(int i = 0; i < arr.length; i++ ) {
+//		    	System.out.println(arr[i]);
+//		    }
+			System.out.println("The file is in the cache = [" + name+ "]");
 		    
 		}
 		else {
-			System.out.println("Faile to find the file = [" + cachePath + name+ "]");
+			System.out.println("Faile to find the file in the cache = [" + cachePath + name+ "]");
 			name = "";
 		}
 		
@@ -456,7 +457,7 @@ public String receiveFileInfo(String fileName, String createDate ) throws IOExce
             output.close();
             in.close();
 
-            System.out.println("File " + fileName + " received from Server.");
+            System.out.println("File " + fileName + " received from File Server.");
         } 
         catch( IOException ex ) {
             Logger.getLogger("PaneraClient").log( Level.SEVERE, null, ex );
