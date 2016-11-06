@@ -37,7 +37,28 @@ You can expect valid input for this kata
 */
 
 function checkAvailability(schedule, currentTime) {
-  // Your code here
+
+  for( var i = 0; schedule.length; i++ ) {
+    var arr = schedule[i];
+
+    if( arr[0] > currentTime || currentTime >= arr[1] ) {
+      return true;
+    }
+    else if( currentTime > arr[0] && currentTime <= arr[1] ) {
+      return arr[1];
+    }
+
+  }
+
+  return true;
 };
 
 module.exports = checkAvailability;
+
+// best practice
+function checkAvailability(schedule, currentTime) {
+  for (let [tb, te] of schedule)
+    if (tb <= currentTime && currentTime < te)
+      return te;
+  return true;
+}
