@@ -13,5 +13,12 @@ x= is the initial solution and should be used only to define x.
 
 All other characters (including spaces) are banned.
 */
+function a() {
+  var x=(![]+[]+[])[+!![]];
+  return x;
+}
 
-x=
+module.exports = a;
+
+// best practice
+x=(![]+[])[+!![]]
