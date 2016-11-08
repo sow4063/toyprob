@@ -21,8 +21,7 @@ Example:
 
 function longestPalindrome( str ) {
 
-  if( str.length <= 1 )
-    return str.length;
+  if( !str ) return 0;
 
   var max = 0;
 
