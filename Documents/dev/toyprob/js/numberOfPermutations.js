@@ -28,50 +28,47 @@ perms("abc")==6
 
 */
 
-function unique(value, index, self) {
-  return self.indexOf(value) === index;
+function factorial(n) {
+  if( n === 1 )
+    return 1;
+
+  return n * factorial(n-1);
 };
 
-function permutations(arr) {
+function perms(element){
 
-  arr = arr.slice();
+  var str = element.toString();
+  var obj = {};
 
-  var permutations = [];
-  var stack = [];
+  str.split('').forEach(function(v){
+    obj[v] ? obj[v]++ : obj[v] = 1;
+  });
 
-  function makePerm() {
-
-    if( arr.length == 0 ) {
-      permutations.push( stack.slice() );
-    }
-
-    for( var i = 0; i < arr.length; i++ ) {
-      var x = arr.splice(i, 1);
-      stack.push(x);
-
-      makePerm();
-
-      stack.pop();
-      arr.splice(i, 0, x);
-    }
+  var products = 1;
+  for( var key in obj ) {
+    products *= factorial( parseInt(obj[key]) );
   }
 
-  makePerm();
+  var count = factorial(str.length);
 
-  return permutations;
+  return parseInt(count / products);
 };
-
-function perms(element) {
-  var input = element.toString().split('');
-  var results = permutations(input);
-
-  for( var i = 0; i < results.length; i++ ) {
-    results[i] = results[i].join('');
-  }
-
-  return results.filter( unique ).length;
-
-};
-
 
 module.exports = perms;
+
+// best practice
+function perms(element) {
+  var str = '' + element;
+  var counts = {};
+  var numerator = 1;
+  var denominator = 1;
+
+  for (var i = 0; i < str.length; i++) {
+    counts[str[i]] = (counts[str[i]] || 0) + 1;
+
+    numerator *= i + 1;
+    denominator *= counts[str[i]];
+  }
+
+  return numerator / denominator;
+}
