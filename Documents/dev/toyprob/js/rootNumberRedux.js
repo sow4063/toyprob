@@ -35,12 +35,7 @@ function root(n, k) {
   return y != x ? y + 1 : y;
 };
 
-console.log(root(4, 2), 2);
-console.log(root(8, 3), 2);
-console.log(root(16,2), 4);
-console.log(root(27,3), 3);
-console.log(root(1e10,10), 10);
-console.log(root(6256875898678471000, 14.556587443597254), 1.9555155181909e+1);
+module.exports = root;
 
 // best practice
 var root = function(x, nth){
