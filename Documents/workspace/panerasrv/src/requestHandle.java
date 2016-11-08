@@ -28,6 +28,8 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+//import com.divine.panera.panera;
+
 public class requestHandle implements Runnable {
 
     private Socket clientSocket;
@@ -145,11 +147,9 @@ public class requestHandle implements Runnable {
                         
                     case 3:
                     	
-                    	sendFileName = workdir + "fileserver.config";
-                    	
-            			System.out.println( "sendFileName = " + sendFileName );
-            			
-                        sendFile( sendFileName );
+                    	while( ( sendFileName = in.readLine() ) != null ) {
+                            sendFile( sendFileName );
+                        }
                         
                         break;
                     
@@ -503,8 +503,30 @@ public void selectFileInfo() throws InstantiationException, IllegalAccessExcepti
     	
         try {
         	
+        	String arr[];
+        	String name;
+        	String createDate;
+        	String strDir;
+        	
             // handle file read
-            File filePath = new File( fileName );
+        	// set the file path from storage
+        	if( fileName.indexOf(".config") != -1 ) {
+        		strDir = workdir;
+        		name = fileName;
+        		createDate = "";
+        	}
+        	else {
+        		arr = fileName.split( DELIMITER );
+            	name = arr[0];
+            	createDate = arr[1];
+            	strDir = storagePath + createDate;
+        	}
+        	
+        	System.out.println("sendFile filename =   [" + name + "]");
+        	System.out.println("sendFile createDate = [" + createDate + "]");
+        	System.out.println( "the storage path =   [" + strDir + "]");
+        	
+            File filePath = new File( strDir + name );
             byte[] buffers = new byte[(int) filePath.length()];
 
             FileInputStream fis = new FileInputStream( filePath );

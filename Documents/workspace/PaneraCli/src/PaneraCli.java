@@ -73,8 +73,8 @@ public class paneracli
 	        	
 				// receiving a file from the server.
 	            //fileName = "test.txt";
-	            //System.out.println("before receiveFile" + fileName );
-	            pan.receiveFile(fileName);
+	            System.out.println("before receiveFile" + name + createDate );
+	            pan.receiveFile( encryptedFileName + panera.DELIMITER + createDate );
 	            
 	            System.out.println("===================================================================");
 	            System.out.println( i + "th running end.");

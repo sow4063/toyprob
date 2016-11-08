@@ -374,17 +374,20 @@ public String receiveFileInfo(String fileName, String createDate ) throws IOExce
         	String encryptedFileName = encryptFileName( name );
         	
         	System.out.println("encrypted file name = " + name + "[" + encryptedFileName + "]" );
-        	System.out.println(fileName);
+        	System.out.println("sendFile filePath = " + fileName);
         	
             File filePath = new File( fileName );
             byte[] buffers = new byte[(int) filePath.length()];
-            
-            InputStream fis = panera.class.getResourceAsStream(fileName);
+
+            FileInputStream fis = new FileInputStream( filePath );
             BufferedInputStream bis = new BufferedInputStream( fis );
-            
+            //bis.read(filearray, 0, filearray.length);
+
             DataInputStream dis = new DataInputStream( bis );
             dis.readFully( buffers, 0, buffers.length );
             dis.close();
+            
+            System.out.println("sendFile 2");
             
             OutputStream os = sock.getOutputStream();
 
