@@ -18,6 +18,7 @@ Corner cases: we assume that 0 ^ 0 = 1 and that lastDigit of an empty list equal
 This kata generalizes Last digit of a large number; you may find useful to solve it beforehand.
 */
 
+/*
 function lastDigit(as){
 
   console.log(as);
@@ -50,28 +51,20 @@ function lastDigit(as){
     }
     else {
 
-      var a = (''+as[0]);
-      a = a[a.length-1]; console.log('a = ', a);
+      var products = 1;
+      as.forEach(function(v) {
+        var c = ( '' + v );
+        c = c[c.length-1];
+        products *= parseInt(c);
+      });
 
-      if( parseInt(a) === 0) return 0;
+      var key = ('' + as[0]);
+      key = key[key.length-1];
 
-      if( parseInt(a) === 1) return 1;
+      var mod = products % key;
+      mod = (mod === 0 ? objrep[key].length - 1 : mod - 1);
 
-      var b = (''+as[1]);
-      b= b[b.length-1];
-
-      var c = (''+as[2]);
-      c = c[c.length-1];
-
-      console.log(a,b,c, a*b*c, (a*b*c)%a);
-
-      //console.log(a,b,c, a*b*c, (a*b*c)%10);
-      //console.log(a,b,c, a*b*c, (a*b*c)%a);
-      //var res = (a*b*c)%10;
-      var mod = (a*b*c)%a;
-      mod = (mod === 0 ? objrep[a].length - 1 : mod - 1);
-
-      return objrep[a][mod];
+      return objrep[key][mod];
     }
 
   }
@@ -84,6 +77,47 @@ function lastDigit(as){
     if( parseInt(a) === 1) return 1;
   }
 
+};
+*/
+function modulo(n, str)
+{
+    // Initialize result
+    var mod = 0;
+
+    // calculating mod of b with a to make
+    // b like 0 <= b < a
+    for( var i = 0; i < str.length; i++ ) {
+      mod = ( mod * 10 + str[i] - '0') % n;
+    }
+    return mod; // return modulo
+};
+
+function lastDigit(str1, str2)
+{
+    // if a and b both are 0
+    if( str1.length === 1 && str2.length === 1 && str2[0] === '0' &&  str1[0] === '0')
+        return 1;
+
+    // if exponent is 0
+    if( str2.length === 1 && str2[0] === '0' )
+        return 1;
+
+    // if base is 0
+    if( str1.length === 1 && str1[0] === '0')
+        return 0;
+
+    // if exponent is divisible by 4 that means last
+    // digit will be pow(a, 4) % 10.
+    // if exponent is not divisible by 4 that means last
+    // digit will be pow(a, b%4) % 10
+    var mod = modulo(4, b);
+    var exp = ( mod === 0 ) ? 4 : mod;
+
+    // Find last digit in 'a' and compute its exponent
+    var res = Math.pow(str1[str1.length - 1] - '0', exp );
+
+    // Return last digit of result
+    return res % 10;
 };
 
 module.exports = lastDigit;
