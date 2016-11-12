@@ -44,10 +44,8 @@ var bubbleSort = function( array ) {
 
   }
 
+  return array;
+
 };
 
-var arr = [2, 1, 3, 3, 5, 8, 0, 1, 0, 4]
-console.log( "before sort : " + arr);
-
-bubbleSort(arr);
-console.log( "after sort : " + arr );
+module.exports = bubbleSort;
