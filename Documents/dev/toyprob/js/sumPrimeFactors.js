@@ -27,31 +27,43 @@ Enjoy it!
 
 */
 
-var isPrime = function(x) {
-  for (var i=2; i*i<=x; i++) { if (x % i == 0) return false; } return true;
-}
+function primeFactor(n){
+  var root = Math.sqrt(n);
+  var result = arguments[1] || [];
+  var x = 2;
 
-var isTarget = function(k, num) {
+  if( n % x ) {
+   x = 3;
+   while( ( n % x ) && ( ( x = x + 2 ) < root ) ) {
 
-  for( var i = 2; i * i <= num; i++ ) {
-    if( isPrime(i) && isPrime(k - i) ) {
-      console.log('isTarge true ', num, k, i, k - i );
-      return true;
+   }
+  }
+
+  x = ( x <= root ) ? x : n;
+
+  result.push(x);
+
+  return ( x === n ) ? result : primeFactor( n / x, result );
+};
+
+function sflpfData(k, nMax) {
+  console.log(k, nMax);
+  var results = [];
+
+  for( let n = k + 1; n <= nMax; n++ ) {
+
+    var primes = primeFactor(n);
+
+    var min = Math.min(...primes);
+    var max = Math.max(...primes);
+
+    if( min + max === k ) {
+      results.push(n);
     }
 
   }
 
-  return false;
-};
-
-function sflpfData(k, nMax) {
-
-  var results = [];
-
-  for( var i = k + 1; i <= nMax; i++ ) {
-    if( isTarget(k, i) )
-      results.push(i);
-  }
+  console.log(results);
 
   return results;
 };
