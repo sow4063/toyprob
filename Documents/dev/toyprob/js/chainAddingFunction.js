@@ -37,12 +37,4 @@ function add(n){
   return sum;
 };
 
-var ret1 = add(3)(4);
-var ret2 = add(3)(5);
-var ret3 = add(9)(-5);
-var ret4 = add(1)(2)(3);
-
-console.log(add(3)(4).valueOf());
-console.log(ret2);
-console.log(ret3);
-console.log(ret4);
+module.exports = add;
