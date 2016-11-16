@@ -68,10 +68,7 @@ function revrot(str, sz) {
 
 };
 
-console.log( revrot2("1234", 0), " == ", "" );
-console.log( revrot2("", 0), " == ", "" );
-console.log( revrot2("1234", 5), " == ", "" );
-console.log( revrot2("733049910872815764", 5), " == ", "330479108928157");
+module.exports = revrot;
 
 // best practice
 function revrot(str, sz) {
