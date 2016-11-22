@@ -50,3 +50,10 @@ var extend = function() {
 module.exports = extend;
 
 // best practice
+var extend = function() {
+  var combined = {};
+  Array.prototype.slice.call(arguments).filter(isObject).reduceRight(function(i,obj){
+    Object.keys(obj).forEach(function(k){combined[k] = obj[k]})
+  },null);
+  return combined;
+}
