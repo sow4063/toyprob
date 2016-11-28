@@ -10,8 +10,23 @@ Example:
 sort([1,3,2]) // should return [1,2,3]
 */
 
+function mergesort(a, b) {
+  var r = [];
+  while( a.length && b && b.length ){
+    if( a[0] < b[0] )
+      r.push( a.shift() );
+    else
+      r.push( b.shift() );
+  }
+
+  return r.concat(a).concat(b);
+};
+
 function sort(items){
-  // create your custom sort logic
+  if( items.length === 1 ) return items;
+  var a = sort( items.slice(0, 1) );
+  var b = sort( items.slice(1) );
+  return mergesort( a, b);
 };
 
 module.exports = sort;
