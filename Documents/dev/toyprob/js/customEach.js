@@ -35,3 +35,8 @@ Array.prototype.each = function(iterator) {
 };
 
 module.exports = Array.prototype.each;
+
+// best practice
+Array.prototype.each = function(callback) {
+  return this.some(callback);
+}
