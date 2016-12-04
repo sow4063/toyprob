@@ -27,11 +27,11 @@ var sum = function(array) {
 // 3. Sum all numbers in an array containing nested arrays.
 // Example: arraySum([1,[2,3],[[4]],5]); // 15
 
-function flatten(){
-  return [].slice.call(arguments).reduce(function(a,b){
-    return a.concat(Array.isArray(b) ? flatten.apply(null,b) : b);
-  },[]);
-};
+// function flatten(){
+//   return [].slice.call(arguments).reduce(function(a,b){
+//     return a.concat(Array.isArray(b) ? flatten.apply(null,b) : b);
+//   },[]);
+// };
 
 // flatten version
 // var arraySum = function(array) {
@@ -66,9 +66,7 @@ var isEven = function(n) {
   if( n === 0 )
     return true;
 
-  n = n < 0 ? n+2 : n-2;
-
-  return isEven(n);
+  return isEven(n-2);
 };
 
 // 5. Sum all integers below a given integer.
@@ -77,44 +75,103 @@ var isEven = function(n) {
 var sumBelow = function(n) {
   if( n <= 1 ) return 0;
 
-  return n - 1 + sumBelow(n-1);
+  return n - 1 + sumBelow( n - 1 );
 };
 
 // 6. Get the integers in range (x, y).
 // Example:  range(2, 9);  // [3, 4, 5, 6, 7, 8]
-var range = function(x, y) {
-  
+var range = function(x,y) {
+  if( y - x < 2 )
+    return [];
+
+  if( y - x === 2 ) {
+    return [x + 1];
+  }
+  else {
+    var array = range(x, y - 1);
+    array.push( y - 1 );
+    return array;
+  }
+
 };
 
 // 7. Compute the exponent of a number.
 // The exponent of a number says how many times the base number is used as a factor.
 // 8^2 = 8 x 8 = 64.  Here, 8 is the base and 2 is the exponent.
 // Example:  exponent(4,3);  // 64
-var exponent = function(base, exp) {};
+var exponent = function(base, exp) {
+  if( exp === 0 )
+    return 1;
+
+  if( exp === 1 )
+    return base * exp;
+
+  return base * exponent(base, exp - 1);
+};
 
 // 8. Determine if a number is a power of two.
 // powerOfTwo(1); // true
 // powerOfTwo(16); // true
 // powerOfTwo(10); // false
-var powerOfTwo = function(n) {};
+var powerOfTwo = function(n) {
+  if( n < 1 )
+    return false;
+  else if( n === 1 )
+    return true;
+
+  return powerOfTwo(n / 2);
+};
 
 // 9. Write a function that accepts a string a reverses it.
-var reverse = function(string) {};
+var reverse = function(string) {
+  if( string.length === 0 )
+    return '';
+
+  return reverse( string.slice(1) ) + string.slice(0,1);
+};
 
 // 10. Write a function that determines if a string is a palindrome.
-var palindrome = function(string) {};
+var palindrome = function(string) {
+
+  if( string.length <= 1 )
+    return true;
+
+  if( string[0] != string[string.length - 1] )
+    return false;
+
+  return palindrome( string.slice( 1, string.length - 1 ) );
+
+};
 
 // 11. Write a function that returns the remainder of x divided by y without using the
 // modulo (%) operator.
 // modulo(5,2) // 1
 // modulo(17,5) // 2
 // modulo(22,6) // 4
-var modulo = function(x, y) {};
+var modulo = function(x, y) {
+  if( x < y )
+    return x;
+
+  return modulo( x - y, y );
+};
 
 // 12. Write a function that multiplies two numbers without using the * operator  or
 // JavaScript's Math object.
-var multiply = function(x, y) {};
+var multiply = function(x, y) {
+  if( y === 0 )
+    return 0;
+
+  return x + multiply( x, y - 1 );
+};
 
 // 13. Write a function that divides two numbers without using the / operator  or
 // JavaScript's Math object.
-var divide = function(x, y) {};
+var divide = function(x, y) {
+  if( x === 0 )
+    return 0;
+
+  if( y > x )
+    return 0;
+
+  return 1 + divide( x - y, y );
+};
