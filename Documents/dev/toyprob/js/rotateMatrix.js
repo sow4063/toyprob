@@ -31,9 +31,11 @@ The two-dimensional array that is passed to the function may have any number of 
 each of which will contain an identical number of elements ("columns").
 */
 
-function rotate(matrix, direction) {
+function rotate(matrix2, direction) {
   var results = [];
   var arr = [];
+
+  var matrix = JSON.parse(JSON.stringify( matrix2 ));
 
   if( direction === 'clockwise' ) {
     while( matrix[0].length ) {
@@ -61,3 +63,21 @@ function rotate(matrix, direction) {
 };
 
 module.exports = rotate;
+
+// best practice
+function rotate(matrix, direction) {
+  var result = [],
+      n = matrix.length,
+      m = matrix[0].length,
+      i, j, row;
+
+  for (i = 0; i < m; ++i) {
+    row = [];
+    for (j = 0; j < n; ++j) {
+      row.push(direction === 'clockwise' ? matrix[n - j - 1][i] : matrix[j][m - i - 1]);
+    }
+    result.push(row);
+  }
+
+  return result;
+}
