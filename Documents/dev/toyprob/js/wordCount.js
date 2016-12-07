@@ -73,25 +73,47 @@ DocumentParser.prototype.reset = function()
 
 DocumentParser.prototype.parse = function()
 {
-  var temp = this.reader.getChunk();
-  var str = temp;
+  var temp;
+  var flag = false;
 
-  while( temp !== '' ) {
+  while( 1 ) {
+
     temp = this.reader.getChunk();
-    str += temp;
+
+    if( temp === '' )
+      break;
+
+    //console.log('[', temp, ']', temp.length);
+
+    // line count
+    var lineNum = temp.split('\n').length - 1;
+    this.lineCount += lineNum;
+    this.charCount -= lineNum;
+
+    // character count
+    this.charCount += temp.length;
+
+    // word count
+    temp = temp.split(' ').filter(function(n){ return n != '' }).join(' ');
+    //console.log('word => ', temp);
+
+    var spaceCount = temp.split(' ').length - 1;
+
+    if( temp !== ' ' ) {
+      this.wordCount += spaceCount;
+      flag = true;
+    }
+    else {
+      flag = false;
+    }
+
+
   }
 
-  var arr = str.split('\n');
-  this.lineCount = arr.length;
-
-  var Words = [];
-
-  for( var i = 0; i < arr.length; i++ ) {
-    Words += arr[i].split(' ');
+  if( flag ) {
+    this.lineCount++;
+    this.WordCount++;
   }
 
-  this.wordCount = Words.split(',').length;
-  this.charCount = Words.split('').join('').length;
 };
-
 module.exports = DocumentParser;
