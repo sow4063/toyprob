@@ -23,3 +23,6 @@ function isIntArray(arr) {
 module.exports = isIntArray;
 
 // best practice
+function isIntArray(arr) {
+  return Array.isArray(arr) && arr.every(function (x) { return Math.floor(x) === x });
+}
